@@ -3,8 +3,15 @@ require 'csv'
 puts 'Event Manager Initialized!'
 
 # Load the CSV file using the CSV library.
-contents = CSV.open('event_attendees.csv', headers: true)
+contents = CSV.open(
+  'event_attendees.csv',
+  headers: true,
+
+  # Convert headers to symbols
+  header_converters: :symbol
+)
 contents.each do |row|
-  name = row[2]
+  # Access column via header name
+  name = row[:first_name]
   puts name
 end
