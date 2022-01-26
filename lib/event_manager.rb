@@ -30,5 +30,7 @@ contents.each do |row|
         'You can find your representatives by visiting www.commoncause.org/take-action/find-elected-officials'
   end
 
+  legislator_names = legislators.map(&:name)
+
   puts "#{name} #{zipcode} #{legislators}"
 end
