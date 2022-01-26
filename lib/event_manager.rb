@@ -1,14 +1,10 @@
+# Load the CSV library
+require 'csv'
 puts 'Event Manager Initialized!'
 
-lines = File.readlines('event_attendees.csv')
-lines.each_with_index do |line, index|
-  # Skip the header row
-  next if index == 0
-
-  # Separate CSV columns
-  columns = line.split(",")
-
-  # Extract the name (third) column
-  name = columns[2]
+# Load the CSV file using the CSV library.
+contents = CSV.open('event_attendees.csv', headers: true)
+contents.each do |row|
+  name = row[2]
   puts name
 end
