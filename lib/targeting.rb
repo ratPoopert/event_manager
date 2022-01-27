@@ -5,7 +5,6 @@ require 'time'
 require 'date'
 
 def display_welcome_message
-  puts "Time Targeter Initialized!\n"
 end
 
 def import_data(filename)
@@ -34,43 +33,34 @@ def get_dates_and_times(data)
   data.map { |row| Time.strptime(row[:regdate], '%m/%d/%y %H:%M') }
 end
 
-def get_hours(dates_and_times)
-  dates_and_times.map(&:hour)
-end
-
-def get_weekdays(dates_and_times)
-  dates_and_times.map(&:wday)
-end
-
 def find_most_common_occurrences(list, top_n)
   list.uniq.max_by(top_n) { |item| list.count(item) }
 end
 
 def find_peak_hours(dates_and_times, top_n)
-  hours = get_hours(dates_and_times)
-  results = find_most_common_occurrences(hours, top_n)
-  results.map { |result| Time.strptime(result.to_s, '%H') }
+  find_most_common_occurrences(dates_and_times.map(&:hour), top_n)
+    .map { |result| Time.strptime(result.to_s, '%H') }
+end
+
+def find_peak_weekdays(dates_and_times, top_n)
+  find_most_common_occurrences(dates_and_times.map(&:wday), top_n)
+    .map { |result| Date::DAYNAMES[result] }
 end
 
 def display_peak_hours(peak_hours, top_n)
   puts "\nHere are the top #{top_n} most responsive hours:"
   peak_hours.each do |peak_hour|
-    puts peak_hour.strftime('%l:00 to %l:59 %P')
+    puts peak_hour.strftime(' > %l:00 to %l:59 %P')
   end
-end
-
-def find_peak_weekdays(dates_and_times, top_n)
-  weekdays = get_weekdays(dates_and_times)
-  results = find_most_common_occurrences(weekdays, top_n)
-  results.map { |result| Date::DAYNAMES[result] }
 end
 
 def display_peak_weekdays(peak_weekdays, top_n)
   puts "\nHere are the top #{top_n} most responsive days:"
-  peak_weekdays.each { |peak_weekday| puts peak_weekday }
+  peak_weekdays.each { |peak_weekday| puts ' > ' + peak_weekday }
 end
 
-display_welcome_message
+system 'clear'
+puts "Time Targeter Initialized!\n"
 filename = 'event_attendees.csv'
 data = import_data(filename)
 top_n = ask_for_desired_number_of_results
